@@ -43,69 +43,6 @@ const ChallengeItem = ({ name, score, status, clickHandler, category }) => {
           </span>
         </div>
       </div>
-      {/* <Card
-        sx={{
-          borderRadius: "4px",
-        }}
-      >
-        <Box xs={3}>
-          <CardContent
-            sx={{
-              bgcolor: status ? "#17803D" : "#474F5B",
-              height: "10rem",
-              width: "10rem",
-            }}
-          >
-            <Stack
-              direction="row"
-              gap={1}
-              alignContent={"center"}
-              alignItems={"center"}
-              sx={{
-                mb: 1,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  lineHeight: "14px",
-                }}
-                color="#ccc"
-              >
-                题目
-              </Typography>
-              {category && (
-                <Typography
-                  level="body-sm"
-                  sx={{
-                    color: "#E2E3E5",
-                    fontSize: "12px",
-                    background: "#1E1E1E",
-                    width: "fit-content",
-                    padding: "3px",
-                    minWidth: "30px",
-                    textAlign: "center",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {category}
-                </Typography>
-              )}
-            </Stack>
-            <Typography variant="h6">{name}</Typography>
-            <Chip
-              sx={{
-                mt: 1,
-              }}
-              size="small"
-              icon={<Flag />}
-              label={score}
-            />
-          </CardContent>
-        </Box>
-      </Card> */}
     </BorderBox12>
   );
 };
@@ -122,8 +59,8 @@ const Challenges = () => {
     status: false,
     content: "",
   });
-
   const [curCategory, setCurCategory] = useState(0);
+
   const categoryList = useMemo(() => {
     const category = [];
     const _set = new Set();
@@ -143,11 +80,11 @@ const Challenges = () => {
     return category;
   }, [selfChallenge]);
 
-  const getChallenges = () => {
+  const getChallenges = useMemo(() => {
     if (curCategory === 0) return selfChallenge;
 
     return selfChallenge.filter((i) => i.category === curCategory);
-  };
+  }, [curCategory, selfChallenge]);
 
   return (
     <>
@@ -184,11 +121,10 @@ const Challenges = () => {
             container
             spacing={4}
             direction="row"
-            // justifyContent="space-between"
             alignItems="center"
             justifyContent="center"
           >
-            {getChallenges()?.map((item, index) => (
+            {getChallenges?.map((item, index) => (
               <Grid item key={item.name + index}>
                 <ChallengeItem
                   clickHandler={async () => {

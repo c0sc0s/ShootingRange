@@ -35,3 +35,7 @@ export function delCookie(name) {
   if (cval != null)
     document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
 }
+
+export const getDotNumber = (number) => {
+  return number.toFixed(2);
+};

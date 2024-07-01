@@ -84,6 +84,7 @@ const NewsItem = (item) => {
 
 const NewList = () => {
   const { news, upLoadWp, restartContainer } = useAppStore();
+
   const [pwdModalOpen, setPwdModalOpen] = useState(false);
   const [pwd, setPwd] = useState({
     newPwd: "",

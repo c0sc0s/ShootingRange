@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
   Pagination,
+  TableFooter,
 } from "@mui/material";
 import { useEffect } from "react";
 import { getChallenges, getRankList } from "../../apis/rank";
@@ -173,14 +174,17 @@ const Rank = () => {
   );
 
   return (
-    <div className="rounded-lg border border-[#515151] overflow-x-scroll m-10 bg-[#121C34]">
+    <div className="container mx-auto border rounded-sm border-[#515151] z-10 relative">
       <TableContainer
         sx={{
           bgcolor: "#061029",
         }}
         component={Paper}
       >
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table
+          sx={{ minWidth: 650, width: "100%", overflowX: "scroll" }}
+          aria-label="simple table"
+        >
           <TableHead
             sx={{
               bgcolor: "#05153A",
@@ -228,7 +232,7 @@ const Rank = () => {
           <TableBody>{bodyRows}</TableBody>
         </Table>
       </TableContainer>
-      <div className="w-full flex my-4 justify-center">
+      <div className="w-full flex my-4 justify-center w-full">
         <Pagination
           onChange={(e, d) => {
             setPageInfo((pre) => ({

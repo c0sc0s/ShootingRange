@@ -1,5 +1,6 @@
-import { Outlet } from "react-router-dom";
 import bg from "./bg.jpg";
+
+import { Outlet } from "react-router-dom";
 import { useInitApp } from "../../hooks";
 import useAppStore from "../../store";
 import MyLoading from "../Loading";
@@ -8,8 +9,9 @@ import ParticlesBg from "particles-bg";
 import { Toaster } from "sonner";
 import { CssBaseline } from "@mui/material";
 
+// 左右两侧的粒子效果
 const DynamicBg = () => (
-  <>
+  <div className="-z-10">
     <ParticlesBg
       type="cobweb"
       color="#17803D"
@@ -38,11 +40,13 @@ const DynamicBg = () => (
         height: "100vh",
       }}
     />
-  </>
+  </div>
 );
 
-function ResponsiveAppBar() {
+function Layout() {
+  // 初始化 APP，请求初始数据
   useInitApp();
+
   const { loading } = useAppStore();
 
   return (
@@ -66,4 +70,4 @@ function ResponsiveAppBar() {
     </>
   );
 }
-export default ResponsiveAppBar;
+export default Layout;

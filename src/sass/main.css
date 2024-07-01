@@ -31,3 +31,26 @@ html {
 .MuiBackdrop-root {
   background-color: rgba(0, 0, 0, 0.691) !important;
 }
+
+/* 通用滚动条样式 */
+::-webkit-scrollbar {
+  width: 10px; /* 滚动条的宽度 */
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #05153a; /* 滚动条轨道的背景颜色 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #203b80; /* 滚动条滑块的背景颜色 */
+  border-radius: 5px; /* 滑块的圆角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #203b80; /* 鼠标悬停时滑块的背景颜色 */
+}
+
+canvas {
+  z-index: -10;
+}
