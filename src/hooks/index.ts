@@ -15,6 +15,17 @@ const refreshNewsList = async () => {
   return data;
 };
 
+function pollData(callback, interval = 10000) {
+  // 启动轮询
+  callback();
+  let pollInterval = setInterval(callback, interval);
+
+  return () => {
+    // 停止轮询
+    clearInterval(pollInterval);
+  };
+}
+
 export const useInitApp = () => {
   const {
     setBoard,
@@ -32,6 +43,8 @@ export const useInitApp = () => {
   } = useAppStore();
 
   useEffect(() => {
+    let cancel;
+
     (async () => {
       setLoading(true);
 
@@ -50,13 +63,11 @@ export const useInitApp = () => {
       setUpLoadWp(upLoadWp);
 
       const res = await getSelfChallenge();
-      if (!res) window.location.href = "/login";
 
       // 所有题目
       const problems = res.data;
       const { data: _solvedList } = await getSolvedlist();
       const solvedList = _solvedList.map((item) => item.challenge_id);
-
       setSolvedList(solvedList);
 
       problems.forEach((challenge) => {
@@ -70,16 +81,30 @@ export const useInitApp = () => {
       const { data: selfInfo } = await getSelfScore();
       const { name, points } = selfInfo;
 
-      const { data: teams } = await getAllTeams();
-
       setTeamName(name);
       setPoints(points);
       setProblems(problems);
       setLoading(false);
-      setAllTeams(teams);
 
-      const list = await refreshNewsList();
-      setNews(list);
+      const cancelPollTeams = pollData(async () => {
+        const { data: teams } = await getAllTeams();
+        //保留 teams 前十个
+        teams.splice(10);
+
+        setAllTeams(teams);
+      });
+
+      const cancelPollNews = pollData(async () => {
+        const list = await refreshNewsList();
+        setNews(list);
+      });
+
+      cancel = () => {
+        cancelPollTeams();
+        cancelPollNews();
+      };
     })();
+
+    return cancel;
   }, []);
 };

@@ -23,3 +23,11 @@
 html {
   background-color: #061029;
 }
+
+.MuiDialog-paper {
+  background-color: #011439d7 !important;
+}
+
+.MuiBackdrop-root {
+  background-color: rgba(0, 0, 0, 0.691) !important;
+}

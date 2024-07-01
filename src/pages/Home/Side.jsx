@@ -1,4 +1,3 @@
-import Ring from "./Chart";
 import {
   BorderBox12,
   Decoration9,
@@ -7,31 +6,6 @@ import {
 import TimeDown from "./Timedown";
 import useAppStore from "../../store";
 import { useMemo } from "react";
-
-const config2 = {
-  data: [
-    {
-      name: "超级无敌战队",
-      value: 12,
-    },
-    {
-      name: "帅哥战队",
-      value: 11,
-    },
-    {
-      name: "战队对队",
-      value: 3,
-    },
-    {
-      name: "啊对队",
-      value: 3,
-    },
-    {
-      name: "X队",
-      value: 6,
-    },
-  ],
-};
 
 const Side = () => {
   const { solvedList, problems, teamName, points, allTeams } = useAppStore();
@@ -44,7 +18,6 @@ const Side = () => {
   };
 
   const listData = useMemo(() => {
-    console.log("all", allTeams);
     return {
       data: allTeams.map((item) => {
         return {
@@ -53,7 +26,7 @@ const Side = () => {
         };
       }),
     };
-  }, []);
+  }, [allTeams]);
 
   return (
     <div className="w-[340px] flex flex-col gap-8">

@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Layout from "../pages/Layout/Layout";
 import NotFound from "../pages/404/NotFount";
 import Map from "../pages/Map/Map";
+import Rank from "../pages/Rank";
 
 const router = createBrowserRouter([
   {
@@ -14,9 +15,13 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+      // {
+      //   path: "/range",
+      //   element: <Map />,
+      // },
       {
-        path: "/range",
-        element: <Map />,
+        path: "/rank",
+        element: <Rank />,
       },
     ],
   },

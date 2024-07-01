@@ -17,6 +17,9 @@ export default async function request({ path, method, body }) {
       if (path !== "/solve/check") {
         alert(data?.msg);
       }
+      if (data?.msg === "请先登录!") {
+        window.location.href = "/login";
+      }
       return Promise.reject(data);
     }
     return data;

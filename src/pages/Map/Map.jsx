@@ -4,7 +4,6 @@ const url = "/screen/";
 
 const Map = () => {
   const cookie = document.cookie;
-  console.log("main-->cookie", document.cookie);
   return (
     <div
       style={{

@@ -100,7 +100,6 @@ const NewList = () => {
   };
 
   const handleUpload = async (file) => {
-    console.log(file);
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
