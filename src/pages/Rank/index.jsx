@@ -7,31 +7,35 @@ import {
   TableHead,
   TableRow,
   Pagination,
-  TableFooter,
 } from "@mui/material";
 import { useEffect } from "react";
 import { getChallenges, getRankList } from "../../apis/rank";
 import { useState } from "react";
-import _ from "lodash";
+import _, { set } from "lodash";
 import { useMemo } from "react";
 import { Check } from "lucide-react";
 import { useRef } from "react";
 import { Medal } from "lucide-react";
+import { ClipLoader } from "react-spinners";
 
 const Rank = () => {
   const [isLoading, setIsLoading] = useState(false);
+
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     size: 10,
-    total: 0,
+    count: 0,
   });
+
   const [allChallenges, setChallenges] = useState(new Map());
   const [rankData, setRankData] = useState([]);
 
   const _challenges = useRef();
 
   const getAllChallenges = async () => {
+    setIsLoading(true);
     const { data: challengesData } = await getChallenges();
+
     const challengesMap = new Map();
     challengesData.forEach((i) => {
       const key = i.category;
@@ -46,11 +50,13 @@ const Rank = () => {
 
     _challenges.current = challengesMap;
     setChallenges(challengesMap);
+    setIsLoading(false);
     return challengesMap;
   };
 
   const updateRankData = async (page, size, challenges) => {
-    const { data: _rankData } = await getRankList({
+    setIsLoading(true);
+    const { data: _rankData, count } = await getRankList({
       page: String(page || "1"),
       size: String(size || "10"),
     });
@@ -85,10 +91,12 @@ const Rank = () => {
     });
 
     setRankData(_rankData);
-    if (_rankData.count !== pageInfo.total) {
+    setIsLoading(false);
+    console.log("count", count);
+    if (count !== pageInfo.count) {
       setPageInfo((pre) => ({
         ...pre,
-        total: rankData.count,
+        count,
       }));
     }
   };
@@ -121,7 +129,7 @@ const Rank = () => {
       return (
         <TableRow key={row.name} hover>
           <TableCell align="center" component="th" scope="row">
-            {index + 1}
+            {(pageInfo.page - 1) * pageInfo.size + index + 1}
           </TableCell>
           <TableCell align="center" component="th" scope="row">
             {row.name}
@@ -157,30 +165,55 @@ const Rank = () => {
     });
   }, [rankData]);
 
-  const category = ["web", "re", "misc", "Crypto", "pwn"];
-  const categoryRows = useMemo(
-    () =>
-      category?.map((i) => (
-        <TableCell
-          className="border border-[#515151] "
-          align="center"
-          colSpan={allChallenges.get(i)?.length || 0}
-        >
-          <span className="uppercase font-custom bold">{i}</span>
-        </TableCell>
-      )),
+  const category = useMemo(() => {
+    return [...allChallenges.keys()];
+  }, [allChallenges]);
 
-    [category]
-  );
+  const categoryRows = useMemo(() => {
+    console.log(category);
+
+    return category?.map((i) => (
+      <TableCell
+        className="border border-[#515151] "
+        align="center"
+        colSpan={allChallenges.get(i)?.length || 0}
+      >
+        <span className="uppercase font-custom bold">{i}</span>
+      </TableCell>
+    ));
+  }, [category]);
 
   return (
     <div className="container mx-auto border rounded-sm border-[#515151] z-10 relative">
       <TableContainer
         sx={{
-          bgcolor: "#061029",
+          bgcolor: "#05153A",
         }}
         component={Paper}
       >
+        {/* 加一层遮罩 */}
+
+        {isLoading && (
+          <>
+            <div className="absolute inset-0 bg-black opacity-50"></div>
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <ClipLoader
+                color={"blue"}
+                loading={isLoading}
+                size={100}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            </div>
+          </>
+        )}
         <Table
           sx={{ minWidth: 650, width: "100%", overflowX: "scroll" }}
           aria-label="simple table"
@@ -232,7 +265,7 @@ const Rank = () => {
           <TableBody>{bodyRows}</TableBody>
         </Table>
       </TableContainer>
-      <div className="w-full flex my-4 justify-center w-full">
+      <div className="w-full flex my-4 justify-center">
         <Pagination
           onChange={(e, d) => {
             setPageInfo((pre) => ({
@@ -242,7 +275,7 @@ const Rank = () => {
             updateRankData(d);
           }}
           size={String(pageInfo.size)}
-          count={pageInfo.count}
+          count={Math.ceil(pageInfo.count / pageInfo.size)}
         />
       </div>
     </div>
