@@ -42,6 +42,7 @@ const initData = async () => {
     setTeamName,
     setPoints,
     setAllTeams,
+    setStartTime,
   } = useAppStore.getState();
 
   setLoading(true);
@@ -71,6 +72,7 @@ const initData = async () => {
 
   const boardData = Base64Decode(_board.data) as string;
   const time = _board.time as number;
+  const startTime = _board.startTime as number;
   const restartContainer = _board.restartContainer as boolean;
   const upLoadWp = _board.upLoadWp as boolean;
 
@@ -78,6 +80,7 @@ const initData = async () => {
   setBoard(boardData);
   setTitle(title);
   setTime(time);
+  setStartTime(startTime);
   setRestartContainer(restartContainer);
   setUpLoadWp(upLoadWp);
 

@@ -25,8 +25,7 @@ function getRemainingTime(timestamp) {
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}:${formattedMilliseconds}`;
 }
 
-const TimeCount = () => {
-  const { time } = useAppStore();
+const TimeCount = ({ time, startTime }) => {
   const [timeCount, setTimeCount] = useState(getRemainingTime(time));
 
   useEffect(() => {
@@ -37,16 +36,16 @@ const TimeCount = () => {
     return () => clearInterval(interval);
   }, [time]);
 
-  const getColor = (remainingSeconds) => {
-    const maxSeconds = 86400; // 1 day in seconds
-    const ratio = remainingSeconds / maxSeconds;
+  const getColor = (remainingSeconds, startTime) => {
+    const totalSeconds = time - startTime;
+    const ratio = remainingSeconds / totalSeconds;
     const red = Math.floor(255 * (1 - ratio));
     const green = Math.floor(255 * ratio);
     return `rgb(${red}, ${green}, 0)`;
   };
 
   const remainingSeconds = time - Math.floor(Date.now() / 1000);
-  const color = getColor(remainingSeconds);
+  const color = getColor(remainingSeconds, startTime);
 
   return (
     <span className="text-[1.2rem] text-center w-[150px]" style={{ color }}>
@@ -56,13 +55,14 @@ const TimeCount = () => {
 };
 
 const Clock = () => {
+  const { time, startTime } = useAppStore();
   return (
     <div className="mb-4 w-[300px]">
       <BorderBox7>
         <div className="font-custom flex items-center justify-center">
           剩余时间:
           <div className="w-[150px]">
-            <TimeCount />
+            <TimeCount time={time} startTime={startTime} />
           </div>
         </div>
       </BorderBox7>

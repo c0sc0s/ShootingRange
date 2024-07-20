@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 type Store = {
   title: string;
+  startTime: number;
   time: number;
   problems: [];
   board: string;
@@ -16,6 +17,7 @@ type Store = {
   mySolvedInfo: {};
   setTitle: (title: string) => void;
   setTime: (time: number) => void;
+  setStartTime: (time: number) => void;
   setProblems: (problems: []) => void;
   setBoard: (board: string) => void;
   setLoading: (loading: boolean) => void;
@@ -42,8 +44,10 @@ const useAppStore = create<Store>((set) => ({
   teamName: "",
   points: 0,
   allTeams: [],
+  startTime: 0,
   mySolvedInfo: {},
   setBoard: (board) => set({ board }),
+  setStartTime: (startTime) => set({ startTime }),
   setNews: (news) => set({ news }),
   setProblems: (problems) => set({ problems }),
   setTime: (time) => set({ time }),
